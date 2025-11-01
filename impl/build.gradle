@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'org.example.Main'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation("com.opencsv:opencsv:5.9")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+tasks.register('fatJar', Jar) {
+    archiveBaseName = 'CSVMovParser'
+    archiveVersion = '1.0-SNAPSHOT'
+
+    from sourceSets.main.output
+    from project(':core').sourceSets.main.output
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'org.example.Main'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
