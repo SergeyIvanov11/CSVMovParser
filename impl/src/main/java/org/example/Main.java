@@ -4,11 +4,10 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws UnsupportedEncodingException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public static void main(String[] args) throws Exception {
         ObjectFactory factory = new ObjectFactory();
         MovieParserImpl movieParser = new MovieParserImpl();
         MovieAnalyserImpl movieAnalyser = factory.getBean(MovieAnalyserImpl.class);
@@ -24,7 +23,6 @@ public class Main {
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         }
-
         movieAnalyser.printResults();
     }
 }

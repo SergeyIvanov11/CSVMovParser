@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.CustomSpring.*;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
@@ -7,19 +8,19 @@ import java.util.*;
 
 public class MovieAnalyserImpl implements MovieAnalyser {
     @MyBean
-    private Map<String, Integer> genreCount;
+    Map<String, Integer> genreCount;
     @MyBean
-    private Map<String, Integer> languageCount;
+    Map<String, Integer> languageCount;
     @MyBean
-    private Map<Integer, Movie> highestRated;
+    Map<Integer, Movie> highestRated;
     @MyBean
-    private Map<Integer, Movie> lowestRated;
-    private final Queue<Movie> top5 = new PriorityQueue<>(Comparator.comparingDouble(m -> m.imdb));
+    Map<Integer, Movie> lowestRated;
+    final Queue<Movie> top5 = new PriorityQueue<>(Comparator.comparingDouble(m -> m.imdb));
     @MyProperty(value = "null")
-    private Movie oldest;
+    Movie oldest;
     @MyProperty(value = "null")
-    private Movie newest;
-    private Duration totalMinutes = Duration.ofMinutes(0);
+    Movie newest;
+    Duration totalMinutes = Duration.ofMinutes(0);
 
     @Override
     public void analyze(Movie m) {

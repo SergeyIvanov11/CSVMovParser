@@ -1,4 +1,4 @@
-package org.example;
+package org.example.CustomSpring;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MyProperty {
-
-    String value();
+public @interface MyBean {
 }
