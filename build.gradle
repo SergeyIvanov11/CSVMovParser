@@ -32,6 +32,6 @@ test {
 tasks.register('buildAll') {
     dependsOn ':core:build'
     dependsOn ':impl:fatJar'
-    // dependsOn ':impl:build'
-    // dependsOn jar
+   //  dependsOn ':impl:build'
+  //   dependsOn jar
 }
