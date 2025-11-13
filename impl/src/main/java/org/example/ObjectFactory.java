@@ -12,7 +12,7 @@ public class ObjectFactory {
 
     public ObjectFactory() {
         handlers.add(new MyBeanAnnotationHandler());
-        handlers.add(new MyPropertyAnnotationHandler());
+        handlers.add(new MyPropertyAnnotationHandler(new EnvironmentVariableGetter()));
     }
 
 

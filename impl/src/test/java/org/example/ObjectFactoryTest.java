@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.CustomSpring.MyBean;
-import org.example.CustomSpring.MyBeanAnnotationHandler;
-import org.example.CustomSpring.MyProperty;
-import org.example.CustomSpring.MyPropertyAnnotationHandler;
+import org.example.CustomSpring.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ObjectFactoryTest {
     static class TestClass1 {
@@ -73,14 +71,17 @@ class ObjectFactoryTest {
     @Test
     void testMatchesPropertyAnnotation() throws Exception {
         Field field = TestClass2.class.getDeclaredField("javaHome");
-        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler();
+        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler(new EnvironmentVariableGetter());
 
         assertTrue(handler.matches(field));
     }
 
     @Test
     void testHandleInjectsEnvironmentProperty() throws Exception {
-        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler();
+        EnvironmentVariableGetter mock = mock(EnvironmentVariableGetter.class);
+        when(mock.get("JAVA_HOME")).thenReturn("c:\\Program Files\\Java\\jdk-19\\bin");
+        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler(mock);
+
         TestClass2 obj = new TestClass2();
         Field field = TestClass2.class.getDeclaredField("javaHome");
 
@@ -88,15 +89,14 @@ class ObjectFactoryTest {
 
         field.setAccessible(true);
         String value = (String) field.get(obj);
+        assertEquals("c:\\Program Files\\Java\\jdk-19\\bin", value);
 
-        // JAVA_HOME должна быть определена в окружении
-        assertNotNull(value);
-        assertTrue(value.contains("Java") || value.contains("java") || value.length() > 2);
+        verify(mock).get("JAVA_HOME");
     }
 
     @Test
     void testHandleSetsNullProperty() throws Exception {
-        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler();
+        MyPropertyAnnotationHandler handler = new MyPropertyAnnotationHandler(new EnvironmentVariableGetter());
         TestClass2 obj = new TestClass2();
         Field field = TestClass2.class.getDeclaredField("nullable");
 
